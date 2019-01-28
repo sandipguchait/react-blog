@@ -8,6 +8,9 @@ import Navbar from './components/Navbar/index';
 import Footer from './components/Footer/index';
 import CreateArticle from './components/CreateArticle/index';
 import Login from './components/Login/index';
+import SingleArticle from './components/SingleArticle/index';
+import Signup from './components/Signup';
+
 
 const Home =()=>(
     <h1> This is the Home Page </h1>
@@ -25,8 +28,10 @@ const Root = ()=> (
         <Route exact path="/" component={Welcome} />
         <Route  path="/home" component={Home} />
         <Route  path="/about" component={About} />
-        <Route path="/login" component={Login}/>
-        <Route path="/articles/create" component={CreateArticle}/>
+        <Route  path="/login" component={Login}/>
+        <Route  path="/signup" component={Signup}/>
+        <Route  path="/article/:id" component={SingleArticle}/>
+        <Route  path="/articles/create" component={CreateArticle}/>
         <Footer/>
     </div>
     </BrowserRouter>
