@@ -11,7 +11,7 @@ import Login from './components/Login/index';
 import SingleArticle from './components/SingleArticle/index';
 import Signup from './components/Signup';
 
-
+// Hiding navbar and footer with authentication pages 
 const Main = withRouter(({ location  })=> {
     return(
         <div>
@@ -35,6 +35,7 @@ const Root = ()=> (
         <Main/>
     </BrowserRouter>
 )
+
 
 ReactDOM.render(<Root/>, document.getElementById('root'));
 
