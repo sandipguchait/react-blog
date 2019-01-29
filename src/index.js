@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Welcome  from './components/Welcome/index';
-import { BrowserRouter, Route,  } from 'react-router-dom';
+import { BrowserRouter, Route, withRouter  } from 'react-router-dom';
 
 //components
 import Navbar from './components/Navbar/index';
@@ -12,28 +12,27 @@ import SingleArticle from './components/SingleArticle/index';
 import Signup from './components/Signup';
 
 
-const Home =()=>(
-    <h1> This is the Home Page </h1>
-)
-
-const About =()=>(
-    <h1> This is the About Page </h1>
-)
-
-
-const Root = ()=> (
-    <BrowserRouter>
-    <div>
-        <Navbar/>
+const Main = withRouter(({ location  })=> {
+    return(
+        <div>
+        {
+            location.pathname !== '/login' && location.pathname !== '/signup' && <Navbar/>
+        }
         <Route exact path="/" component={Welcome} />
-        <Route  path="/home" component={Home} />
-        <Route  path="/about" component={About} />
         <Route  path="/login" component={Login}/>
         <Route  path="/signup" component={Signup}/>
         <Route  path="/article/:id" component={SingleArticle}/>
         <Route  path="/articles/create" component={CreateArticle}/>
-        <Footer/>
+        {
+            location.pathname !== '/login' && location.pathname !== '/signup' && <Footer/>
+        }
     </div>
+    )
+})
+
+const Root = ()=> (
+    <BrowserRouter>
+        <Main/>
     </BrowserRouter>
 )
 
