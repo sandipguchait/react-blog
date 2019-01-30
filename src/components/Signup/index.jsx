@@ -9,7 +9,9 @@ class SignUp extends React.Component {
       name:'',
       email :'',
       password :'',
-      password_confirmation:''
+      // for indicative to work  you should have a password_confirmation as name in input 
+      password_confirmation:'',
+      errors: {}
     } 
 
     handleInputChange=(event)=>{
@@ -22,15 +24,22 @@ class SignUp extends React.Component {
       event.preventDefault();
       console.log(this.state);
       // Validating User using indicative Package
-      //take the data from state 
+      //take the input data from state 
       const data = this.state;
       const  rules = {
         name: 'required|string',
         email: 'required|email',
-        password:'required|string|min:6|confirmed'
+        password:'required|string|min:6|confirmed' // confirmed will check for the password confirmation 
       };
 
-      validateAll( data, rules )
+      // Displaying custom messages for errors
+      const messages = {
+        required: ' This {{ field }} is required.',
+        'email.email': 'The email is invalid.',
+        'password.confirmed': 'The password doesnot match'
+      }
+
+      validateAll( data, rules, messages )
         .then(() => {
           console.log('success')
         })
@@ -39,7 +48,7 @@ class SignUp extends React.Component {
           // show erroes to user
           const formattedErrors = {}
           errors.forEach( error => formattedErrors[error.field] = error.message )
-          console.log(formattedErrors);
+          this.setState({ errors: formattedErrors })
         })
     }
 
@@ -53,12 +62,24 @@ class SignUp extends React.Component {
           <form className="form-type-material" onSubmit={this.handleSubmit}>
             <div className="form-group">
               <input type="text" className="form-control" placeholder="Username" name="name" onChange={this.handleInputChange}/>
+              {
+                this.state.errors['name'] && 
+                <small className="text-danger">{this.state.errors['name']}</small>
+              }
             </div>
             <div className="form-group">
               <input type="text" className="form-control" placeholder="Email address" name="email"onChange={this.handleInputChange} />
+              {
+                this.state.errors['email'] && 
+                <small className="text-danger">{this.state.errors['email']}</small>
+              }
             </div>
             <div className="form-group">
               <input type="password" className="form-control" placeholder="Password" name="password" onChange={this.handleInputChange} />
+              {
+                this.state.errors['password'] && 
+                <small className="text-danger">{this.state.errors['password']}</small>
+              }
             </div>
             <div className="form-group">
               <input type="password" className="form-control" placeholder="Password (confirm)" name="password_confirmation" onChange={this.handleInputChange} />
