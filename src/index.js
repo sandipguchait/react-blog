@@ -11,22 +11,50 @@ import Login from './components/Login/index';
 import SingleArticle from './components/SingleArticle/index';
 import Signup from './components/Signup';
 
+class App extends React.Component {
+
+    state = {
+        authUser: null
+    }
+
+    componentDidMount = ()=> {
+        const user = localStorage.getItem('user')
+        if (user) {
+            this.setState({ authUser: JSON.parse(user)})
+        }
+    }
+
+    setAuthUser = (authUser)=> {
+        this.setState({
+            authUser
+        })
+    }
+
+    render() {
+        const {location} = this.props;
+        return (
+            <div>
+                {
+                    location.pathname !== '/login' && location.pathname !== '/signup' && <Navbar authUser={this.state.authUser}/>
+                }
+                <Route exact path="/" component={Welcome} />
+                <Route  path="/login" component={Login}/>
+                <Route  path="/signup" render={(props) => <Signup  {...props}  setAuthUser={this.setAuthUser}/>}/>
+                <Route  path="/article/:id" component={SingleArticle}/>
+                <Route  path="/articles/create" component={CreateArticle}/>
+                {
+                    location.pathname !== '/login' && location.pathname !== '/signup' && <Footer/>
+                }
+            </div>
+        )
+    }
+}
+
+
 // Hiding navbar and footer with authentication pages 
-const Main = withRouter(({ location  })=> {
+const Main = withRouter((props)=> {
     return(
-        <div>
-        {
-            location.pathname !== '/login' && location.pathname !== '/signup' && <Navbar/>
-        }
-        <Route exact path="/" component={Welcome} />
-        <Route  path="/login" component={Login}/>
-        <Route  path="/signup" component={Signup}/>
-        <Route  path="/article/:id" component={SingleArticle}/>
-        <Route  path="/articles/create" component={CreateArticle}/>
-        {
-            location.pathname !== '/login' && location.pathname !== '/signup' && <Footer/>
-        }
-    </div>
+        <App {...props}/>
     )
 })
 

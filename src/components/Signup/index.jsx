@@ -45,20 +45,26 @@ class SignUp extends React.Component {
       validateAll( data, rules, messages )
         .then(() => {
           //register the user
-          Axios.post(`${config.apiUrl}/auth/register`, {
-            name: this.state.name,
-            email: this.state.email,
-            password: this.state.password
-          }).then(response => {
-            this.props.history.push('/') // on register user is redirected to another page(homepage)
-          }).catch(errors => {
-            console.log(errors.response)
-            // showing error if email is already used or taken
-            const formattedErrors = {};
-            formattedErrors['email'] = errors.response.data['email'][0]; // we fetch the error from response.data with the name of email and in 1st position [0].
-            this.setState({ errors: formattedErrors })
+            Axios.post(`${config.apiUrl}/auth/register`, {
+              name: this.state.name,
+              email: this.state.email,
+              password: this.state.password
+            })
+            .then(response => {
+              localStorage.setItem('user', JSON.stringify(response.data.data)) // persising registration data to local storage
+              this.props.setAuthUser(response.data.data)
+              this.props.history.push('/') // on register user is redirected to another page(homepage)
+            })
+            .catch(errors => {
+              console.log(errors.response)
+              // showing error if email is already used or taken
+              const formattedErrors = {};
+              if( errors.response.status === 422 ){
+                formattedErrors['email'] = errors.response.data['email'][0]; // we fetch the error from response.data with the name of email and in 1st position [0].
+              }
+              this.setState({ errors: formattedErrors })
+            })
           })
-        })
         .catch(errors => {
           console.log(errors);
           // show erroes to user
