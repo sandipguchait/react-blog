@@ -1,7 +1,11 @@
 import React from 'react';
+import config from '../../config/index';
 
 // Importing Indicator for user validation
 import { validateAll } from 'indicative';
+
+//importing axios
+import Axios from 'axios'
 
 class SignUp extends React.Component {
 
@@ -22,7 +26,6 @@ class SignUp extends React.Component {
 
     handleSubmit=(event)=> {
       event.preventDefault();
-      console.log(this.state);
       // Validating User using indicative Package
       //take the input data from state 
       const data = this.state;
@@ -41,7 +44,16 @@ class SignUp extends React.Component {
 
       validateAll( data, rules, messages )
         .then(() => {
-          console.log('success')
+          //register the user
+          Axios.post(`${config.apiUrl}/auth/register`, {
+            name: this.state.name,
+            email: this.state.email,
+            password: this.state.password
+          }).then(response => {
+            console.log(response)
+          }).catch(errors => {
+            console.log(errors)
+          })
         })
         .catch(errors => {
           console.log(errors);
