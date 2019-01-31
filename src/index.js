@@ -38,7 +38,7 @@ class App extends React.Component {
                     location.pathname !== '/login' && location.pathname !== '/signup' && <Navbar authUser={this.state.authUser}/>
                 }
                 <Route exact path="/" component={Welcome} />
-                <Route  path="/login" component={Login}/>
+                <Route  path="/login" render={(props)=> <Login {...props} setAuthUser={this.setAuthUser} />}/>
                 <Route  path="/signup" render={(props) => <Signup  {...props}  setAuthUser={this.setAuthUser}/>}/>
                 <Route  path="/article/:id" component={SingleArticle}/>
                 <Route  path="/articles/create" component={CreateArticle}/>

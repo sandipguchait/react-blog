@@ -3,6 +3,7 @@ import config from '../../config/index';
 
 // Importing Indicator for user validation
 import { validateAll } from 'indicative';
+import { Link } from 'react-router-dom';
 
 //importing axios
 import Axios from 'axios'
@@ -59,7 +60,7 @@ class SignUp extends React.Component {
               console.log(errors.response)
               // showing error if email is already used or taken
               const formattedErrors = {};
-              if( errors.response.status === 422 ){
+              if(errors.response && errors.response.status === 422 ){
                 formattedErrors['email'] = errors.response.data['email'][0]; // we fetch the error from response.data with the name of email and in 1st position [0].
               }
               this.setState({ errors: formattedErrors })
@@ -111,7 +112,7 @@ class SignUp extends React.Component {
           </form>
           <hr className="w-30" />
           <p className="text-center text-muted fs-13 mt-20">Already have an account?
-            <a href="login.html">Sign in</a>
+            <Link to="/login">Sign in</Link>
           </p>
         </div>
       </div>
