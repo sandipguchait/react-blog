@@ -11,14 +11,15 @@ import Login from './components/Login/index';
 import SingleArticle from './components/SingleArticle/index';
 import Signup from './components/Signup';
 
+
 class App extends React.Component {
 
     state = {
         authUser: null
     }
 
-    componentDidMount = ()=> {
-        const user = localStorage.getItem('user')
+    componentDidMount =  ()=> {
+        const user =  localStorage.getItem('user')
         if (user) {
             this.setState({ authUser: JSON.parse(user)})
         }
@@ -41,7 +42,7 @@ class App extends React.Component {
                 <Route  path="/login" render={(props)=> <Login {...props} setAuthUser={this.setAuthUser} />}/>
                 <Route  path="/signup" render={(props) => <Signup  {...props}  setAuthUser={this.setAuthUser}/>}/>
                 <Route  path="/article/:id" component={SingleArticle}/>
-                <Route  path="/articles/create" component={CreateArticle}/>
+                <Route  path="/articles/create" render={props=> ( <CreateArticle {...props} token={this.state.authUser} />)}/>
                 {
                     location.pathname !== '/login' && location.pathname !== '/signup' && <Footer/>
                 }
@@ -54,7 +55,9 @@ class App extends React.Component {
 // Hiding navbar and footer with authentication pages 
 const Main = withRouter((props)=> {
     return(
-        <App {...props}/>
+        <App 
+        {...props}
+        />
     )
 })
 
@@ -66,7 +69,3 @@ const Root = ()=> (
 
 
 ReactDOM.render(<Root/>, document.getElementById('root'));
-
-if (module.hot) {
-    module.hot.accept();
-}
